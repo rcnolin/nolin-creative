@@ -1,16 +1,253 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import FrameIcon from "../components/FrameIcon.astro";
+import FeaturedWork from "../components/FeaturedWork.astro";
 
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Nolin Creative">
+
+  <main class="mx-auto max-w-6xl px-4 py-16">
+    <!-- Hero -->
+    <section>
+      <h1 class="text-4xl font-semibold tracking-tight md:text-6xl">
+        Drone pano360, web repair, and audio that elevate your brand.
+      </h1>
+
+      <p class="mt-6 max-w-2xl text-lg text-neutral-700">
+        Drone video and photo, pano360, video and audio editing, website repair, and custom soundtrack and composition.
+      </p>
+
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a
+          href="/contact"
+          class="rounded-full bg-neutral-900 px-5 py-3 text-sm font-medium text-white hover:bg-neutral-800 transition-colors"
+        >
+          Start a project
+        </a>
+
+        <a
+          href="/drone"
+          class="rounded-full border border-neutral-100 px-5 py-3 text-sm font-medium text-neutral-900 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.35)] transition hover:shadow-[inset_0_0_0_1px_rgba(0,0,0,0.9)]"
+        >
+          View drone work
+        </a>
+      </div>
+    </section>
+
+    <!-- What we do -->
+    <section class="mt-16 md:mt-20">
+      <div>
+        <p class="text-sm font-medium tracking-wide text-neutral-500">WHAT WE DO</p>
+        <h2 class="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
+          Audio, drone, video, and web.
+        </h2>
+      </div>
+
+      <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- Audio -->
+        <a
+          href="/audio"
+          class="group rounded-2xl bg-white p-5 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.35)] transition-colors hover:shadow-[inset_0_0_0_1px_rgba(0,0,0,0.9)]"
+        >
+          <div class="flex items-center justify-between">
+            <div class="rounded-xl shadow-[inset_0_0_0_1px_rgba(0,0,0,0.25)] p-2">
+              <FrameIcon name="audio" class="h-6 w-6 text-neutral-900" />
+            </div>
+            <span class="text-sm text-neutral-500 transition group-hover:text-neutral-900">→</span>
+          </div>
+
+          <h3 class="mt-6 text-lg font-semibold tracking-tight">Audio</h3>
+          <p class="mt-2 text-sm text-neutral-600">
+            Custom soundtrack, composition, and audio editing.
+          </p>
+        </a>
+
+        <!-- Drone -->
+        <a
+          href="/drone"
+          class="group rounded-2xl bg-white p-5 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.35)] transition hover:shadow-[inset_0_0_0_1px_rgba(0,0,0,0.9)]"
+        >
+          <div class="flex items-center justify-between">
+            <div class="rounded-xl shadow-[inset_0_0_0_1px_rgba(0,0,0,0.25)] p-2">
+              <FrameIcon name="drone" class="h-6 w-6 text-neutral-900" />
+            </div>
+            <span class="text-sm text-neutral-500 transition group-hover:text-neutral-900">→</span>
+          </div>
+
+          <h3 class="mt-6 text-lg font-semibold tracking-tight">Drone</h3>
+          <p class="mt-2 text-sm text-neutral-600">
+            Drone video, photo, and pano360 captures.
+          </p>
+        </a>
+
+        <!-- Video -->
+        <a
+          href="/video"
+          class="group rounded-2xl bg-white p-5 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.35)] transition hover:shadow-[inset_0_0_0_1px_rgba(0,0,0,0.9)]"
+        >
+          <div class="flex items-center justify-between">
+            <div class="rounded-xl shadow-[inset_0_0_0_1px_rgba(0,0,0,0.25)] p-2">
+              <FrameIcon name="video" class="h-6 w-6 text-neutral-900" />
+            </div>
+            <span class="text-sm text-neutral-500 transition group-hover:text-neutral-900">→</span>
+          </div>
+
+          <h3 class="mt-6 text-lg font-semibold tracking-tight">Video</h3>
+          <p class="mt-2 text-sm text-neutral-600">
+            Editing, story cuts, reels, and brand visuals.
+          </p>
+        </a>
+
+        <!-- Web -->
+        <a
+          href="/web"
+          class="group rounded-2xl bg-white p-5 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.35)] transition hover:shadow-[inset_0_0_0_1px_rgba(0,0,0,0.9)]"
+        >
+          <div class="flex items-center justify-between">
+            <div class="rounded-xl shadow-[inset_0_0_0_1px_rgba(0,0,0,0.25)] p-2">
+              <FrameIcon name="web" class="h-6 w-6 text-neutral-900" />
+            </div>
+            <span class="text-sm text-neutral-500 transition group-hover:text-neutral-900">→</span>
+          </div>
+
+          <h3 class="mt-6 text-lg font-semibold tracking-tight">Web</h3>
+          <p class="mt-2 text-sm text-neutral-600">
+            Repairs, performance, cleanup, and rebuilds.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Featured work -->
+     <FeaturedWork />
+
+
+<!-- How it works -->
+<section class="mt-20">
+  <div class="mx-auto max-w-4xl">
+    <p class="text-sm font-medium tracking-wide text-neutral-500">
+      HOW IT WORKS
+    </p>
+
+    <h2 class="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
+      A focused, collaborative process.
+    </h2>
+
+    <div class="mt-10 grid grid-cols-1 gap-8 md:grid-cols-3">
+      <!-- Step 1 -->
+      <div>
+        <p class="text-xs font-medium tracking-wide text-neutral-500">01</p>
+        <h3 class="mt-2 text-lg font-semibold tracking-tight">
+          Start the conversation
+        </h3>
+        <p class="mt-3 text-sm text-neutral-600">
+          We talk through the idea, the location, and what the work needs to communicate.
+        </p>
+      </div>
+
+      <!-- Step 2 -->
+      <div>
+        <p class="text-xs font-medium tracking-wide text-neutral-500">02</p>
+        <h3 class="mt-2 text-lg font-semibold tracking-tight">
+          Shape the approach
+        </h3>
+        <p class="mt-3 text-sm text-neutral-600">
+          Scope, timeline, and deliverables are defined so the creative can stay focused.
+        </p>
+      </div>
+
+      <!-- Step 3 -->
+      <div>
+        <p class="text-xs font-medium tracking-wide text-neutral-500">03</p>
+        <h3 class="mt-2 text-lg font-semibold tracking-tight">
+          Create and refine
+        </h3>
+        <p class="mt-3 text-sm text-neutral-600">
+          Capture, edit, compose, and polish. Final files delivered ready to use.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="mt-20">
+  <div class="mx-auto grid max-w-5xl grid-cols-1 gap-10 md:grid-cols-2 md:items-center">
+    <!-- Image placeholder -->
+    <div class="aspect-4/5 w-full overflow-hidden rounded-2xl bg-neutral-200 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.12)]">
+      <!--
+        Later, replace this div with:
+        <img src="/about.jpg" alt="Nolin Creative" class="h-full w-full object-cover" />
+      -->
+    </div>
+
+    <!-- Text -->
+    <div>
+      <p class="text-sm font-medium tracking-wide text-neutral-500">
+        ABOUT
+      </p>
+
+      <h2 class="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
+        About Nolin Creative
+      </h2>
+
+      <div class="mt-6 space-y-4 text-base text-neutral-700">
+        <p>
+          Nolin Creative is a small, independent studio focused on visuals and sound
+          that feel considered, not overproduced.
+        </p>
+
+        <p>
+          The work spans drone capture, pano360, video and audio editing, and custom
+          composition — always shaped by the project, not a preset style.
+        </p>
+
+        <p class="text-sm text-neutral-500">
+          Based in Calgary, AB. Available for select projects.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="mt-16">
+  <div class="rounded-2xl bg-neutral-900 p-8 text-white md:p-10">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 md:items-center">
+      <div>
+        <p class="text-sm font-medium tracking-wide text-white/60">
+          READY WHEN YOU ARE
+        </p>
+        <h2 class="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
+          Let’s make something carefully.
+        </h2>
+        <p class="mt-4 text-base text-white/80">
+          Tell me what you’re building and what you want it to feel like. I’ll reply with a simple next step.
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-3 md:items-end">
+        <a
+          href="/contact"
+          class="inline-flex w-fit items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-neutral-900 hover:bg-white/90 transition-colors"
+        >
+          Start a project
+        </a>
+        <!-- <a
+          href="mailto:ryan@nolincreative.com"
+          class="inline-flex w-fit items-center justify-center rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-white hover:border-white/50 transition-colors"
+        >
+          Email instead
+        </a> -->
+        <p class="text-xs text-white/60">
+          Typical reply time: within 1–2 days.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </main>
+</BaseLayout>

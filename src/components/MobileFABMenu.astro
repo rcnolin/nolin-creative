@@ -1,0 +1,157 @@
+---
+const links = [
+  { label: "Home", href: "/" },
+  { label: "Audio", href: "/audio" },
+  { label: "Drone", href: "/drone" },
+  { label: "Video", href: "/video" },
+  { label: "Web", href: "/web" },
+  { label: "Contact", href: "/contact" },
+];
+
+const { currentPath = "" } = Astro.props;
+
+function isActive(href: string) {
+  return href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+}
+---
+
+<!-- Wrapper gets the data attribute so global.css can hide it when a modal is open -->
+<div data-mobile-fab class="md:hidden">
+  <!-- Backdrop -->
+  <div
+    data-fab-backdrop
+    class="fixed inset-0 z-40 bg-black/40 opacity-0 pointer-events-none transition-opacity duration-200 ease-out"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Floating menu panel -->
+  <div
+    data-fab-panel
+    class="fixed left-1/2 bottom-28 z-50 w-[min(360px,calc(100vw-2.5rem))] -translate-x-1/2 translate-y-3 rounded-2xl border border-neutral-200 bg-white shadow-xl opacity-0 pointer-events-none transition-all duration-200 ease-out"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Site menu"
+  >
+    <nav class="px-5 py-5">
+      <ul class="flex flex-col items-center gap-2">
+        {links.map((l) => (
+          <li class="w-full">
+            <a
+              href={l.href}
+              class:list={[
+                "block w-full rounded-xl px-4 py-3 text-center text-base transition-colors",
+                isActive(l.href)
+                  ? "bg-neutral-900 text-white"
+                  : "text-neutral-800 hover:bg-neutral-50",
+              ]}
+              aria-current={isActive(l.href) ? "page" : undefined}
+            >
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Bottom center Menu / X button (same size) -->
+  <button
+    type="button"
+    aria-expanded="false"
+    aria-label="Toggle menu"
+    data-fab-menu
+    class="fixed bottom-5 left-1/2 z-50 flex h-16 w-16 -translate-x-1/2 items-center justify-center rounded-full bg-neutral-900 text-white shadow-lg transition-transform duration-150 ease-out active:scale-95"
+  >
+    <!-- MENU label -->
+    <span
+      data-label-menu
+      class="text-sm font-semibold tracking-wide transition-all duration-200 ease-out"
+    >
+      MENU
+    </span>
+
+    <!-- X label -->
+    <span
+      data-label-close
+      class="absolute text-2xl font-medium opacity-0 scale-75 transition-all duration-200 ease-out"
+      aria-hidden="true"
+    >
+      ✕
+    </span>
+  </button>
+
+  <script>
+    // @ts-nocheck
+
+    const openBtn = document.querySelector("[data-fab-menu]");
+    const panel = document.querySelector("[data-fab-panel]");
+    const backdrop = document.querySelector("[data-fab-backdrop]");
+
+    const labelMenu = openBtn?.querySelector("[data-label-menu]");
+    const labelClose = openBtn?.querySelector("[data-label-close]");
+
+    /**
+ * @param {boolean} isOpen
+ */
+function setButtonState(isOpen) {
+  if (!labelMenu || !labelClose || !openBtn) return;
+
+  if (isOpen) {
+    labelMenu.classList.add("opacity-0", "scale-75");
+    labelClose.classList.remove("opacity-0", "scale-75");
+  } else {
+    labelMenu.classList.remove("opacity-0", "scale-75");
+    labelClose.classList.add("opacity-0", "scale-75");
+  }
+}
+
+    function bounce() {
+      if (!openBtn) return;
+      openBtn.classList.add("scale-95");
+      setTimeout(() => openBtn.classList.remove("scale-95"), 120);
+    }
+
+    function openMenu() {
+      panel?.classList.remove("opacity-0", "pointer-events-none", "translate-y-3");
+      panel?.classList.add("opacity-100", "pointer-events-auto", "translate-y-0");
+
+      backdrop?.classList.remove("opacity-0", "pointer-events-none");
+      backdrop?.classList.add("opacity-100", "pointer-events-auto");
+
+      openBtn?.setAttribute("aria-expanded", "true");
+      setButtonState(true);
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeMenu() {
+      panel?.classList.add("opacity-0", "pointer-events-none", "translate-y-3");
+      panel?.classList.remove("opacity-100", "pointer-events-auto", "translate-y-0");
+
+      backdrop?.classList.add("opacity-0", "pointer-events-none");
+      backdrop?.classList.remove("opacity-100", "pointer-events-auto");
+
+      openBtn?.setAttribute("aria-expanded", "false");
+      setButtonState(false);
+      document.body.style.overflow = "";
+    }
+
+    openBtn?.addEventListener("click", () => {
+      bounce();
+      openBtn.getAttribute("aria-expanded") === "true"
+        ? closeMenu()
+        : openMenu();
+    });
+
+    backdrop?.addEventListener("click", closeMenu);
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeMenu();
+    });
+
+    panel?.addEventListener("click", (e) => {
+      if (e.target instanceof HTMLAnchorElement) closeMenu();
+    });
+
+    setButtonState(false);
+  </script>
+</div>

@@ -1,0 +1,41 @@
+---
+const links = [
+  { label: "Home", href: "/" },
+  { label: "Audio", href: "/audio" },
+  { label: "Drone", href: "/drone" },
+  { label: "Video", href: "/video" },
+  { label: "Web", href: "/web" },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-neutral-200 bg-white/80 backdrop-blur">
+  <div class="relative mx-auto flex max-w-6xl items-center px-4 py-4">
+    {/* Logo always (mobile + desktop) */}
+    <a href="/" class="absolute left-1/2 z-10 -translate-x-1/2 font-semibold tracking-tight md:static md:translate-x-0">
+      Nolin Creative
+    </a>
+
+
+    {/* Desktop centered nav */}
+    <nav class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 md:flex">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          class="text-sm text-neutral-700 hover:text-neutral-950 transition-colors"
+        >
+          {l.label}
+        </a>
+      ))}
+    </nav>
+
+    {/* Desktop CTA right */}
+    <div class="ml-auto hidden md:block">
+      <a
+        href="/contact"
+        class="rounded-full bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 transition-colors"
+      >
+        Contact
+      </a>
+    </div>
+  </div>
+</header>

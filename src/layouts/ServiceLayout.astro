@@ -1,0 +1,50 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+const {
+  title,
+  subtitle,
+} = Astro.props;
+---
+
+<BaseLayout title={title}>
+  <main class="mx-auto max-w-4xl px-4 py-16">
+    <!-- Hero -->
+    <section>
+      <p class="text-sm font-medium tracking-wide text-neutral-500">
+        SERVICE
+      </p>
+
+      <h1 class="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
+        {title}
+      </h1>
+
+      <p class="mt-6 max-w-2xl text-lg text-neutral-700">
+        {subtitle}
+      </p>
+    </section>
+
+    <!-- Page content -->
+    <section class="mt-16 space-y-16">
+      <slot />
+            <!-- Small CTA (service pages) -->
+      <section class="rounded-2xl bg-neutral-50 p-6 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)] md:p-8">
+        <h2 class="text-xl font-semibold tracking-tight">
+          Start a project
+        </h2>
+        <p class="mt-3 max-w-2xl text-sm text-neutral-700">
+          If you have a location, a timeline, or a rough idea, that’s plenty to begin.
+        </p>
+        <div class="mt-6">
+          <a
+            href="/contact"
+            class="inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800 transition-colors"
+          >
+            Contact
+          </a>
+        </div>
+      </section>
+
+    </section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,18 @@
+@import "tailwindcss";
+html {
+  scrollbar-gutter: stable;
+}
+body.modal-open [data-mobile-fab] {
+  opacity: 0;
+  pointer-events: none;
+}
+/* Photo Sphere Viewer cursor */
+.psv-container,
+.psv-canvas-container {
+  cursor: grab !important;
+}
+
+.psv-container:active,
+.psv-canvas-container:active {
+  cursor: grabbing !important;
+}
