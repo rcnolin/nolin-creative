@@ -3,26 +3,39 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="mt-8 border-t border-neutral-200 py-10 pb-28 md:pb-10">
-  <div class="mx-auto flex max-w-6xl flex-col gap-6 px-4 md:flex-row md:items-center md:justify-between">
-    <div>
-      <p class="text-sm font-semibold tracking-tight text-neutral-900">
-        Nolin Creative
-      </p>
-      <p class="mt-1 text-sm text-neutral-600">
-        Audio • Drone • Video • Web
+  <div class="mx-auto max-w-6xl px-4">
+    <!-- Top row as a 3 column grid on desktop -->
+    <div class="grid gap-6 md:grid-cols-3 md:items-center">
+      <!-- Left -->
+      <div class="md:justify-self-start">
+        <p class="text-sm font-semibold tracking-tight text-neutral-900">
+          Nolin Creative
+        </p>
+        <p class="mt-1 text-sm text-neutral-600">
+          Audio • Drone • Video • Web
+        </p>
+      </div>
+
+      <!-- Center -->
+      <nav class="flex flex-wrap justify-start gap-x-6 gap-y-2 text-sm md:justify-center">
+        <a class="text-neutral-600 hover:text-neutral-900 transition-colors" href="/audio">Audio</a>
+        <a class="text-neutral-600 hover:text-neutral-900 transition-colors" href="/drone">Drone</a>
+        <a class="text-neutral-600 hover:text-neutral-900 transition-colors" href="/video">Video</a>
+        <a class="text-neutral-600 hover:text-neutral-900 transition-colors" href="/web">Web</a>
+        <a class="text-neutral-600 hover:text-neutral-900 transition-colors" href="/contact">Contact</a>
+      </nav>
+
+      <!-- Right -->
+      <p class="text-sm text-neutral-500 md:justify-self-end">
+        © {year} Nolin Creative
       </p>
     </div>
 
-    <nav class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-      <a class="text-neutral-600 hover:text-neutral-900 transition-colors" href="/audio">Audio</a>
-      <a class="text-neutral-600 hover:text-neutral-900 transition-colors" href="/drone">Drone</a>
-      <a class="text-neutral-600 hover:text-neutral-900 transition-colors" href="/video">Video</a>
-      <a class="text-neutral-600 hover:text-neutral-900 transition-colors" href="/web">Web</a>
-      <a class="text-neutral-600 hover:text-neutral-900 transition-colors" href="/contact">Contact</a>
-    </nav>
-
-    <p class="text-sm text-neutral-500">
-      © {year} Nolin Creative
-    </p>
+    <!-- Credit aligned to the nav column -->
+    <div class="mt-10 md:grid md:grid-cols-3">
+      <p class="text-sm font-semibold tracking-tight text-neutral-900 text-center md:col-start-2 md:col-end-3">
+        Website made by Nolin Creative
+      </p>
+    </div>
   </div>
 </footer>
