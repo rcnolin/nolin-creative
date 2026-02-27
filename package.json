@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@photo-sphere-viewer/core": "^5.14.1",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.16.6",
     "tailwindcss": "^4.1.18"

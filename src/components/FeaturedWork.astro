@@ -1,35 +1,41 @@
 ---
+import "@photo-sphere-viewer/core/index.css";
+
 const items = [
   {
     id: "pano360-01",
     title: "Drone pano360",
     type: "pano",
-    tag: "PANORAMA",
+    tag: "DRONE",
     description:
-      "Equirectangular pano captured from drone. Designed for smooth interactive viewing.",
+      "An interactive 360 pano captured from a drone. Click or drag to explore the full scene. Scroll to zoom.",
     src: "/panos/GriffithWoods360.JPG",
     thumb: "/thumbs/GriffithWoods360-thumb.jpg",
   },
   {
-    id: "video-01",
-    title: "Video edit",
-    type: "video",
-    tag: "VIDEO",
-    description:
-      "Tight cuts, pacing, and sound design. Built for clean, high-impact delivery.",
-  },
-  {
     id: "audio-01",
-    title: "Custom soundtrack",
-    type: "audio",
+    title: "Custom audio",
+    type: "youtube",
     tag: "AUDIO",
     description:
-      "Original composition shaped to mood and motion.",
+      "A short client video showcasing an original audio track. Composition included predetermined timestamps.",
+    src: "https://www.youtube.com/watch?v=0J7re49TWQU",
+    thumb: "https://img.youtube.com/vi/0J7re49TWQU/maxresdefault.jpg",
+  },
+  {
+    id: "insta-01",
+    title: "Instagram reel",
+    type: "instagram",
+    tag: "VIDEO",
+    description:
+      "An instagram reel featuring edited drone video captured on location.",
+    src: "https://www.instagram.com/p/DCw4D15v_Un/",
+    thumb: "/thumbs/InstaReel-thumb.jpg",
   },
 ];
 ---
 
-<section>
+<section class="space-y-6">
   <div class="rounded-2xl bg-neutral-50 p-6 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)] md:p-8">
     <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
       <div>
@@ -44,89 +50,136 @@ const items = [
       {items.map((item) => (
         <button
           type="button"
-          class="group cursor-pointer text-left overflow-hidden rounded-2xl bg-white shadow-[inset_0_0_0_1px_rgba(0,0,0,0.10)] transition hover:shadow-[inset_0_0_0_1px_rgba(0,0,0,0.22)]"
+          class="group cursor-pointer overflow-hidden rounded-2xl bg-white text-left shadow-[inset_0_0_0_1px_rgba(0,0,0,0.10)] transition hover:shadow-[inset_0_0_0_1px_rgba(0,0,0,0.22)] flex flex-col h-full"
           data-work-open
+          data-id={item.id}
           data-title={item.title}
           data-type={item.type}
           data-tag={item.tag}
           data-description={item.description}
-          data-src={item.src ?? ""}
+          data-src={item.src}
+          aria-label={`Open ${item.title}`}
         >
-          <div class="relative aspect-16/10 overflow-hidden bg-neutral-200">
-            {item.thumb && (
-              <>
-                <img
-                  src={item.thumb}
-                  alt=""
-                  loading="lazy"
-                  class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                />
-                <div class="absolute inset-0 bg-black/0 transition group-hover:bg-black/10"></div>
-              </>
-            )}
-          </div>
+          {item.thumb ? (
+            <img
+              src={item.thumb}
+              alt=""
+              class="block aspect-16/10 w-full object-cover transition duration-300 ease-out group-hover:scale-[1.02]"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div class="relative aspect 16/10 bg-neutral-200">
+              <div class="absolute inset-0 flex items-center justify-center">
+                <p class="text-xs font-medium tracking-wide text-neutral-600">
+                  THUMBNAIL
+                </p>
+              </div>
+            </div>
+          )}
 
-          <div class="p-5">
+          <div class="p-5 flex flex-col flex-1">
             <div class="flex items-center justify-between gap-4">
               <h3 class="text-base font-semibold tracking-tight">{item.title}</h3>
-              <span class="text-sm text-neutral-500 transition group-hover:text-neutral-900">→</span>
+              <span class="text-sm text-neutral-500 transition group-hover:text-neutral-900">
+                →
+              </span>
             </div>
-            <p class="mt-2 text-sm text-neutral-600">{item.description}</p>
-            <p class="mt-4 text-xs font-medium tracking-wide text-neutral-500">{item.tag}</p>
+
+            <p class="mt-2 text-sm text-neutral-600 line-clamp-3">{item.description}</p>
+            <p class="mt-auto pt-4 text-xs font-medium tracking-wide text-neutral-500">{item.tag}</p>
           </div>
         </button>
       ))}
     </div>
   </div>
 
-  <!-- Modal -->
-  <div data-work-modal class="fixed inset-0 z-999 hidden" aria-hidden="true">
-    <div data-work-backdrop class="absolute inset-0 bg-black/50"></div>
+  {/* CTA block */}
+  <div class="rounded-2xl bg-white p-6 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.10)] md:p-8">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>
+        <h3 class="text-lg font-semibold tracking-tight md:text-xl">
+          Have a project in mind
+        </h3>
+        <p class="mt-1 text-sm text-neutral-600">
+          Share a few details and I will respond with a clear next step.
+        </p>
+      </div>
 
-    <div class="absolute inset-0 flex items-center justify-center px-0 pb-[env(safe-area-inset-bottom)] md:px-4 md:pb-0">
+      <a
+        href="/contact"
+        class="inline-flex w-fit items-center justify-center rounded-full bg-neutral-900 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+      >
+        Start a project
+      </a>
+    </div>
+  </div>
+
+  {/* Modal */}
+  <div data-work-modal class="fixed inset-0 z-50 hidden" aria-hidden="true">
+    <div data-work-backdrop class="absolute inset-0 bg-black/55"></div>
+
+    <div class="absolute inset-0 flex items-center justify-center">
       <div
-        class="h-dvh w-full bg-white shadow-xl pb-[max(3.5rem,env(safe-area-inset-bottom))] md:h-auto md:max-w-7xl md:rounded-2xl md:pb-0"
+        data-work-panel
+        class="relative w-full bg-white shadow-2xl flex flex-col overflow-hidden
+               my-4 h-[calc(100svh-2rem)]
+               md:my-8 md:h-[calc(100svh-4rem)]
+               md:max-w-7xl md:rounded-2xl"
         role="dialog"
         aria-modal="true"
+        aria-label="Featured work details"
+        tabindex="-1"
       >
-        <div class="flex items-start justify-between gap-6 px-6 pt-6">
-          <div>
-            <p data-work-tag class="text-xs font-medium tracking-wide text-neutral-500"></p>
-            <h3 data-work-title class="mt-2 text-xl font-semibold tracking-tight md:text-2xl"></h3>
+        <div class="relative z-20 flex items-start justify-between gap-6 px-6 pt-6 pb-5 border-b border-neutral-200">
+          <div class="min-w-0">
+            <p data-work-tag class="text-xs font-medium tracking-wide text-neutral-500">TAG</p>
+            <h3 data-work-title class="mt-2 text-xl font-semibold tracking-tight md:text-2xl truncate">
+              Title
+            </h3>
           </div>
 
           <button
             type="button"
             data-work-close
-            class="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full hover:bg-neutral-100 transition-colors"
+            class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition cursor-pointer
+                   active:bg-neutral-200
+                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/20"
+            aria-label="Close modal"
           >
             <span class="text-2xl leading-none">✕</span>
           </button>
         </div>
 
-        <div class="px-6 pb-24 pt-5 md:pb-6">
-          <div
-            data-work-viewer
-            class="h-[70dvh] w-full overflow-hidden rounded-none bg-neutral-200 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.12)] md:h-[65vh] md:max-h-187.5 md:rounded-2xl"
-          ></div>
+        <div class="flex-1 min-h-0 px-6 pt-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] flex flex-col gap-5">
+          <div class="flex-1 min-h-0">
+            <div
+              data-work-viewer
+              class="relative z-0 h-full w-full overflow-hidden bg-neutral-200 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.12)] md:rounded-2xl flex items-center justify-center"
+            ></div>
+          </div>
 
-          <p data-work-description class="mt-5 text-sm text-neutral-700"></p>
+          <div class="shrink-0">
+            <p data-work-description class="text-sm text-neutral-700 max-h-20 overflow-hidden">
+              Description
+            </p>
 
-          <div class="mt-6 flex flex-wrap gap-3">
-            <a
-              href="/contact"
-              class="rounded-full bg-neutral-900 px-5 py-3 text-sm font-medium text-white hover:bg-neutral-800 transition-colors"
-            >
-              Start a project
-            </a>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <a
+                href="/contact"
+                class="rounded-full bg-neutral-900 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+              >
+                Start a project
+              </a>
 
-            <button
-              type="button"
-              data-work-secondary-close
-              class="cursor-pointer rounded-full border border-neutral-300 px-5 py-3 text-sm font-medium text-neutral-900 transition-colors hover:bg-neutral-200"
-            >
-              Close
-            </button>
+              <button
+                type="button"
+                data-work-secondary-close
+                class="rounded-full border border-neutral-300 px-5 py-3 text-sm font-medium text-neutral-900 transition-colors hover:shadow-[inset_0_0_0_1px_rgba(0,0,0,0.9)] cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -134,148 +187,325 @@ const items = [
   </div>
 
   <script>
-  // @ts-nocheck
+    // @ts-nocheck
 
-  /** @type {HTMLElement | null} */
-  const modal = document.querySelector("[data-work-modal]");
-  /** @type {HTMLElement | null} */
-  const backdrop = document.querySelector("[data-work-backdrop]");
-  /** @type {HTMLButtonElement | null} */
-  const closeBtn = document.querySelector("[data-work-close]");
-  /** @type {HTMLButtonElement | null} */
-  const closeBtn2 = document.querySelector("[data-work-secondary-close]");
+    const modal = document.querySelector("[data-work-modal]");
+    const panel = document.querySelector("[data-work-panel]");
+    const backdrop = document.querySelector("[data-work-backdrop]");
+    const closeBtn = document.querySelector("[data-work-close]");
+    const closeBtn2 = document.querySelector("[data-work-secondary-close]");
 
-  /** @type {HTMLElement | null} */
-  const titleEl = document.querySelector("[data-work-title]");
-  /** @type {HTMLElement | null} */
-  const tagEl = document.querySelector("[data-work-tag]");
-  /** @type {HTMLElement | null} */
-  const descEl = document.querySelector("[data-work-description]");
-  /** @type {HTMLElement | null} */
-  const viewerEl = document.querySelector("[data-work-viewer]");
+    const titleEl = document.querySelector("[data-work-title]");
+    const tagEl = document.querySelector("[data-work-tag]");
+    const descEl = document.querySelector("[data-work-description]");
+    const viewerEl = document.querySelector("[data-work-viewer]");
 
-  /** @type {HTMLElement[]} */
-  const openButtons = Array.from(document.querySelectorAll("[data-work-open]"));
+    const openButtons = Array.from(document.querySelectorAll("[data-work-open]"));
 
-  /** @type {any} */
-  let panoViewer = null;
+    let panoViewer = null;
+    let lastActiveEl = null;
 
-  /**
-   * @param {string} text
-   */
-  function setViewerPlaceholder(text) {
-    if (!viewerEl) return;
+    let scrollY = 0;
 
-    viewerEl.innerHTML = "";
-    viewerEl.classList.add("bg-neutral-200");
-    viewerEl.style.background = "";
-
-    const label = document.createElement("div");
-    label.className =
-      "h-full w-full flex items-center justify-center text-sm text-neutral-600";
-    label.textContent = text;
-    viewerEl.appendChild(label);
-  }
-
-  /**
-   * @param {string} panoUrl
-   */
-  async function mountPano(panoUrl) {
-    if (!viewerEl) return;
-
-    viewerEl.innerHTML = "";
-    viewerEl.classList.remove("bg-neutral-200");
-    viewerEl.style.background = "#111";
-
-    await import("@photo-sphere-viewer/core/index.css");
-    const mod = await import("@photo-sphere-viewer/core");
-    const Viewer = mod.Viewer;
-
-    if (panoViewer) {
-      try {
-        panoViewer.destroy();
-      } catch {}
-      panoViewer = null;
+    function lockScroll() {
+      scrollY = window.scrollY || 0;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+      document.body.classList.add("modal-open");
     }
 
-    panoViewer = new Viewer({
-      container: viewerEl,
-      panorama: panoUrl,
-      navbar: false,
-      mousewheel: true,
-      touchmoveTwoFingers: false,
-    });
-  }
+    function unlockScroll() {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+      document.body.classList.remove("modal-open");
+      window.scrollTo(0, scrollY);
+    }
 
-  /**
-   * @param {HTMLElement} btn
-   */
-  async function openModal(btn) {
-    if (!modal) return;
+    function clearViewerContent() {
+      if (!viewerEl) return;
+      viewerEl.innerHTML = "";
+      viewerEl.style.background = "";
+      viewerEl.style.position = "";
+    }
 
-    const title = btn.getAttribute("data-title") || "";
-    const tag = btn.getAttribute("data-tag") || "";
-    const description = btn.getAttribute("data-description") || "";
-    const type = btn.getAttribute("data-type") || "";
-    const src = btn.getAttribute("data-src") || "";
+    function setMode(mode) {
+      if (!viewerEl) return;
 
-    if (titleEl) titleEl.textContent = title;
-    if (tagEl) tagEl.textContent = tag;
-    if (descEl) descEl.textContent = description;
+      viewerEl.className =
+        "relative z-0 h-full w-full overflow-hidden bg-neutral-200 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.12)] md:rounded-2xl flex items-center justify-center";
 
-    modal.classList.remove("hidden");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-    document.body.classList.add("modal-open");
-
-    closeBtn?.focus();
-
-    if (type === "pano") {
-      if (!src) {
-        setViewerPlaceholder("Pano360 source not set");
+      if (mode === "pano") {
+        viewerEl.style.background = "#111";
         return;
       }
-      setViewerPlaceholder("Loading pano360…");
-      try {
-        await mountPano(src);
-      } catch (err) {
-        console.error(err);
-        setViewerPlaceholder("Could not load pano360");
+
+      if (mode === "youtube") {
+        viewerEl.style.background = "#000";
+        return;
       }
-      return;
+
+      if (mode === "instagram") {
+        viewerEl.style.background = "#fff";
+        return;
+      }
     }
 
-    if (type === "video") return setViewerPlaceholder("Video player placeholder");
-    if (type === "audio") return setViewerPlaceholder("Audio player placeholder");
-    setViewerPlaceholder("Media placeholder");
-  }
+    function setViewerPlaceholder(text) {
+      if (!viewerEl) return;
+      clearViewerContent();
 
-  function closeModal() {
-    if (!modal) return;
+      const label = document.createElement("div");
+      label.className = "text-sm text-neutral-200";
+      label.textContent = text;
 
-    if (panoViewer) {
+      viewerEl.style.background = "#111";
+      viewerEl.appendChild(label);
+    }
+
+    async function mountPano(panoUrl) {
+      if (!viewerEl) return;
+
+      clearViewerContent();
+
+      const mod = await import("@photo-sphere-viewer/core");
+      const Viewer = mod.Viewer;
+
+      if (panoViewer) {
+        try { panoViewer.destroy(); } catch {}
+        panoViewer = null;
+      }
+
+      panoViewer = new Viewer({
+        container: viewerEl,
+        panorama: panoUrl,
+        navbar: false,
+        mousewheel: true,
+        touchmoveTwoFingers: false,
+      });
+    }
+
+    function getYouTubeId(url) {
       try {
-        panoViewer.destroy();
-      } catch {}
-      panoViewer = null;
+        const u = new URL(url);
+        if (u.hostname.includes("youtu.be")) return u.pathname.replace("/", "");
+        const v = u.searchParams.get("v");
+        if (v) return v;
+        const parts = u.pathname.split("/");
+        const embedIndex = parts.indexOf("embed");
+        if (embedIndex !== -1 && parts[embedIndex + 1]) return parts[embedIndex + 1];
+        return "";
+      } catch {
+        return "";
+      }
     }
 
-    modal.classList.add("hidden");
-    modal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-    document.body.classList.remove("modal-open");
-  }
+    function mountYouTube(url) {
+      if (!viewerEl) return;
 
-  openButtons.forEach((btn) => {
-    btn.addEventListener("click", () => openModal(btn));
-  });
+      const id = getYouTubeId(url);
+      if (!id) return setViewerPlaceholder("YouTube link is missing an ID");
 
-  backdrop?.addEventListener("click", closeModal);
-  closeBtn?.addEventListener("click", closeModal);
-  closeBtn2?.addEventListener("click", closeModal);
+      clearViewerContent();
 
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeModal();
-  });
-</script>
+      const iframe = document.createElement("iframe");
+      iframe.className = "h-full w-full";
+      iframe.src = `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1`;
+      iframe.setAttribute(
+        "allow",
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      );
+      iframe.setAttribute("allowfullscreen", "true");
+      iframe.setAttribute("title", "YouTube video");
+
+      viewerEl.appendChild(iframe);
+    }
+
+    function instagramShortcode(url) {
+      try {
+        const u = new URL(url);
+        const parts = u.pathname.split("/").filter(Boolean);
+        const pIndex = parts.indexOf("p");
+        if (pIndex !== -1 && parts[pIndex + 1]) return parts[pIndex + 1];
+        return "";
+      } catch {
+        return "";
+      }
+    }
+
+    function mountInstagram(url) {
+      if (!viewerEl) return;
+
+      const code = instagramShortcode(url);
+      if (!code) return setViewerPlaceholder("Instagram link is missing a shortcode");
+
+      clearViewerContent();
+
+      const box = document.createElement("div");
+      box.className = "h-full w-full flex items-center justify-center";
+
+      const frameWrap = document.createElement("div");
+      frameWrap.className =
+        "w-full max-w-[420px] aspect-[9/16] overflow-hidden rounded-2xl bg-white shadow-[inset_0_0_0_1px_rgba(0,0,0,0.12)]";
+
+      const iframe = document.createElement("iframe");
+      iframe.className = "h-full w-full";
+      iframe.style.border = "0";
+      iframe.src = `https://www.instagram.com/p/${code}/embed/`;
+
+      frameWrap.appendChild(iframe);
+      box.appendChild(frameWrap);
+      viewerEl.appendChild(box);
+    }
+
+    function getFocusableElements(root) {
+      if (!root) return [];
+      const selectors = [
+        "a[href]",
+        "button:not([disabled])",
+        "input:not([disabled])",
+        "select:not([disabled])",
+        "textarea:not([disabled])",
+        '[tabindex]:not([tabindex="-1"])',
+      ];
+      return Array.from(root.querySelectorAll(selectors.join(","))).filter(
+        (el) => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length)
+      );
+    }
+
+    function trapFocus(e) {
+      if (!modal || modal.classList.contains("hidden")) return;
+      if (e.key !== "Tab") return;
+
+      const focusables = getFocusableElements(panel);
+      if (focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+
+      if (e.shiftKey) {
+        if (active === first || active === panel) {
+          e.preventDefault();
+          last.focus();
+        }
+        return;
+      }
+
+      if (active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    async function openModal(btn) {
+      if (!modal) return;
+
+      lastActiveEl = document.activeElement;
+
+      const title = btn.getAttribute("data-title") || "";
+      const tag = btn.getAttribute("data-tag") || "";
+      const description = btn.getAttribute("data-description") || "";
+      const type = btn.getAttribute("data-type") || "";
+      const src = btn.getAttribute("data-src") || "";
+
+      if (titleEl) titleEl.textContent = title;
+      if (tagEl) tagEl.textContent = tag;
+      if (descEl) descEl.textContent = description;
+
+      panel?.classList.toggle("is-instagram", type === "instagram");
+
+      modal.classList.remove("hidden");
+      modal.setAttribute("aria-hidden", "false");
+
+      lockScroll();
+
+      if (panoViewer) {
+        try { panoViewer.destroy(); } catch {}
+        panoViewer = null;
+      }
+
+      setMode(type);
+      panel?.focus();
+
+      if (type === "pano") {
+        if (!src) return setViewerPlaceholder("Pano360 source not set");
+        setViewerPlaceholder("Loading pano360...");
+        try {
+          await mountPano(src);
+        } catch (err) {
+          console.error(err);
+          setViewerPlaceholder("Could not load pano360");
+        }
+        return;
+      }
+
+      if (type === "youtube") {
+        if (!src) return setViewerPlaceholder("YouTube source not set");
+        mountYouTube(src);
+        return;
+      }
+
+      if (type === "instagram") {
+        if (!src) return setViewerPlaceholder("Instagram source not set");
+        mountInstagram(src);
+        return;
+      }
+
+      setViewerPlaceholder("Media placeholder");
+    }
+
+    function closeModal() {
+      if (!modal) return;
+
+      if (panoViewer) {
+        try { panoViewer.destroy(); } catch {}
+        panoViewer = null;
+      }
+
+      clearViewerContent();
+      panel?.classList.remove("is-instagram");
+
+      modal.classList.add("hidden");
+      modal.setAttribute("aria-hidden", "true");
+
+      unlockScroll();
+
+      if (lastActiveEl && typeof lastActiveEl.focus === "function") {
+        try { lastActiveEl.focus(); } catch {}
+      }
+      lastActiveEl = null;
+    }
+
+    openButtons.forEach((btn) => {
+      btn.addEventListener("click", () => openModal(btn));
+    });
+
+    backdrop?.addEventListener("click", closeModal);
+    closeBtn?.addEventListener("click", closeModal);
+    closeBtn2?.addEventListener("click", closeModal);
+
+    window.addEventListener("keydown", (e) => {
+      if (!modal || modal.classList.contains("hidden")) return;
+
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeModal();
+        return;
+      }
+
+      trapFocus(e);
+    });
+  </script>
+
+  <style>
+    @media (min-width: 768px) {
+      [data-work-panel].is-instagram {
+        max-width: 520px;
+      }
+    }
+  </style>
 </section>
