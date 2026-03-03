@@ -1,5 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const sent = Astro.url.searchParams.get("sent") === "1";
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 
 <BaseLayout title="Contact">
@@ -14,12 +17,113 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </h1>
 
       <p class="mt-6 max-w-xl text-lg text-neutral-700">
-        Tell me a bit about what you’re working on and what you want it to feel like.
+        Tell me a bit about what you're working on and what you want it to feel like.
       </p>
 
-      <div class="mt-10 rounded-2xl bg-neutral-50 p-6 text-sm text-neutral-600">
-        Contact form coming soon.
-      </div>
+      <form
+        method="POST"
+        action="/api/contact"
+        class="mt-10 space-y-6 rounded-2xl bg-neutral-50 p-6 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)]"
+      >
+        <div class="space-y-2">
+          <label for="name" class="text-sm font-medium text-neutral-800">Name</label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            required
+            autocomplete="name"
+            class="w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-900 focus:border-neutral-900 focus:outline-none"
+          />
+        </div>
+
+        <div class="space-y-2">
+          <label for="email" class="text-sm font-medium text-neutral-800">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            class="w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-900 focus:border-neutral-900 focus:outline-none"
+          />
+        </div>
+
+        <div class="space-y-2">
+          <label for="message" class="text-sm font-medium text-neutral-800">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            required
+            rows="6"
+            class="w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-900 focus:border-neutral-900 focus:outline-none"
+          ></textarea>
+        </div>
+
+        <div>
+          <div class="cf-turnstile" data-sitekey={siteKey}></div>
+        </div>
+
+        <div class="pt-2">
+          <button
+            type="submit"
+            class="inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+          >
+            Send message
+          </button>
+        </div>
+      </form>
     </section>
   </main>
+
+  <!-- Success dialog -->
+  <dialog
+    id="contact-success"
+    class="w-[min(520px,calc(100vw-2rem))] rounded-2xl bg-white p-0 shadow-2xl backdrop:bg-black/55"
+  >
+    <div class="p-6 md:p-7">
+      <p class="text-sm font-medium tracking-wide text-neutral-500">SENT</p>
+      <h2 class="mt-2 text-2xl font-semibold tracking-tight">
+        Message received
+      </h2>
+      <p class="mt-3 text-sm text-neutral-700">
+        Thanks for reaching out. I will reply as soon as I can.
+      </p>
+
+      <div class="mt-6 flex justify-end">
+        <button
+          type="button"
+          data-close-success
+          class="rounded-full border border-neutral-300 bg-white px-5 py-3 text-sm font-medium text-neutral-900 hover:bg-neutral-50 cursor-pointer"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+  // @ts-nocheck
+
+  // Load Turnstile script
+  const script = document.createElement("script");
+  script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+  script.async = true;
+  script.defer = true;
+  document.head.appendChild(script);
+
+  const sent = {sent};
+
+  const dialog = document.getElementById("contact-success");
+  const closeBtn = document.querySelector("[data-close-success]");
+
+  if (sent && dialog?.showModal) {
+    dialog.showModal();
+    const url = new URL(window.location.href);
+    url.searchParams.delete("sent");
+    window.history.replaceState({}, "", url.toString());
+  }
+
+  closeBtn?.addEventListener("click", () => dialog?.close());
+</script>
 </BaseLayout>

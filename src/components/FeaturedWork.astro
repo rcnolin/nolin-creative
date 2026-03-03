@@ -8,7 +8,7 @@ const items = [
     type: "pano",
     tag: "DRONE",
     description:
-      "An interactive 360 pano captured from a drone. Click or drag to explore the full scene. Scroll to zoom.",
+      "An interactive 360 pano captured from a drone. Click, hold, and drag to explore the full scene. Scroll-wheel to zoom.",
     src: "/panos/GriffithWoods360.JPG",
     thumb: "/thumbs/GriffithWoods360-thumb.jpg",
   },
@@ -28,7 +28,7 @@ const items = [
     type: "instagram",
     tag: "VIDEO",
     description:
-      "An instagram reel featuring edited drone video captured on location.",
+      "An instagram reel featuring edited drone video captured on location by Nolin Creative.",
     src: "https://www.instagram.com/p/DCw4D15v_Un/",
     thumb: "/thumbs/InstaReel-thumb.jpg",
   },
@@ -36,7 +36,7 @@ const items = [
 ---
 
 <section class="space-y-6">
-  <div class="rounded-2xl bg-neutral-50 p-6 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)] md:p-8">
+  <div class="rounded-2xl bg-neutral-200 p-6 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)] md:p-8">
     <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
       <div>
         <p class="text-sm font-medium tracking-wide text-neutral-500">FEATURED WORK</p>
@@ -314,6 +314,8 @@ const items = [
       const iframe = document.createElement("iframe");
       iframe.className = "h-full w-full";
       iframe.src = `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1`;
+      iframe.loading = "lazy";
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
       iframe.setAttribute(
         "allow",
         "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
