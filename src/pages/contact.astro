@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const sent = Astro.url.searchParams.get("sent") === "1";
 const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 
@@ -105,28 +104,32 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
   <script>
-    // @ts-nocheck
-    const sent = {sent};
-    const dialog = document.getElementById("contact-success");
-    const closeBtn = document.querySelector("[data-close-success]");
+  // @ts-nocheck
+  const dialog = document.getElementById("contact-success");
+  const closeBtn = document.querySelector("[data-close-success]");
 
-    function openSuccess() {
-      if (!dialog) return;
-      if (typeof dialog.showModal === "function") dialog.showModal();
-      else dialog.setAttribute("open", "");
-      try {
-        const url = new URL(window.location.href);
-        url.searchParams.delete("sent");
-        window.history.replaceState({}, "", url.toString());
-      } catch {}
-    }
+  function openSuccess() {
+    if (!dialog) return;
+    if (typeof dialog.showModal === "function") dialog.showModal();
+    else dialog.setAttribute("open", "");
 
-    if (sent) openSuccess();
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("sent");
+      window.history.replaceState({}, "", url.toString());
+    } catch {}
+  }
 
-    closeBtn?.addEventListener("click", () => {
-      try { dialog?.close?.(); } catch {}
-    });
-  </script>
+  // Static Astro page, so check query params in the browser
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("sent") === "1") openSuccess();
+  } catch {}
+
+  closeBtn?.addEventListener("click", () => {
+    try { dialog?.close?.(); } catch {}
+  });
+</script>
 
   <style>
     /* Keep Turnstile present but visually quiet */
