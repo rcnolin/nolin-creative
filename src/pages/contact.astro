@@ -8,9 +8,7 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 <BaseLayout title="Contact">
   <main class="mx-auto max-w-3xl px-4 py-16 pb-28 md:pb-16">
     <section>
-      <p class="text-sm font-medium tracking-wide text-neutral-500">
-        CONTACT
-      </p>
+      <p class="text-sm font-medium tracking-wide text-neutral-500">CONTACT</p>
 
       <h1 class="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
         Start a conversation
@@ -21,6 +19,7 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
       </p>
 
       <form
+        id="contact-form"
         method="POST"
         action="/api/contact"
         class="mt-10 space-y-6 rounded-2xl bg-neutral-50 p-6 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)]"
@@ -60,14 +59,14 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
           ></textarea>
         </div>
 
-        <div>
-          <div class="cf-turnstile" data-sitekey={siteKey}></div>
-        </div>
+        <!-- Invisible Turnstile mount point (no visible footprint) -->
+        <div id="turnstile-widget" class="hidden"></div>
 
         <div class="pt-2">
           <button
+            id="submit-btn"
             type="submit"
-            class="inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+            class="inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800 cursor-pointer"
           >
             Send message
           </button>
@@ -83,9 +82,7 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   >
     <div class="p-6 md:p-7">
       <p class="text-sm font-medium tracking-wide text-neutral-500">SENT</p>
-      <h2 class="mt-2 text-2xl font-semibold tracking-tight">
-        Message received
-      </h2>
+      <h2 class="mt-2 text-2xl font-semibold tracking-tight">Message received</h2>
       <p class="mt-3 text-sm text-neutral-700">
         Thanks for reaching out. I will reply as soon as I can.
       </p>
@@ -103,27 +100,109 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   </dialog>
 
   <script>
-  // @ts-nocheck
+    // @ts-nocheck
 
-  // Load Turnstile script
-  const script = document.createElement("script");
-  script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
-  script.async = true;
-  script.defer = true;
-  document.head.appendChild(script);
+    // Preconnect is nice, but optional
+    const pre = document.createElement("link");
+    pre.rel = "preconnect";
+    pre.href = "https://challenges.cloudflare.com";
+    document.head.appendChild(pre);
 
-  const sent = {sent};
+    // Load Turnstile with explicit rendering so we can execute on submit
+    const ts = document.createElement("script");
+    ts.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    ts.defer = true;
+    document.head.appendChild(ts);
 
-  const dialog = document.getElementById("contact-success");
-  const closeBtn = document.querySelector("[data-close-success]");
+    const sent = {sent};
 
-  if (sent && dialog?.showModal) {
-    dialog.showModal();
-    const url = new URL(window.location.href);
-    url.searchParams.delete("sent");
-    window.history.replaceState({}, "", url.toString());
-  }
+    const dialog = document.getElementById("contact-success");
+    const closeBtn = document.querySelector("[data-close-success]");
 
-  closeBtn?.addEventListener("click", () => dialog?.close());
-</script>
+    function openSuccess() {
+      if (!dialog) return;
+      if (typeof dialog.showModal === "function") dialog.showModal();
+      else dialog.setAttribute("open", "");
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("sent");
+        window.history.replaceState({}, "", url.toString());
+      } catch {}
+    }
+
+    if (sent) openSuccess();
+
+    closeBtn?.addEventListener("click", () => dialog?.close?.());
+
+    // Invisible Turnstile: render + execute on submit
+    const form = document.getElementById("contact-form");
+    const submitBtn = document.getElementById("submit-btn");
+    const mount = document.getElementById("turnstile-widget");
+    let widgetId = null;
+    let submitting = false;
+
+    function ensureHiddenTokenInput() {
+      let input = form.querySelector('input[name="cf-turnstile-response"]');
+      if (!input) {
+        input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "cf-turnstile-response";
+        form.appendChild(input);
+      }
+      return input;
+    }
+
+    function renderWidgetWhenReady() {
+      if (!window.turnstile || !mount) return;
+
+      // Render once
+      if (widgetId !== null) return;
+
+      widgetId = window.turnstile.render(mount, {
+        sitekey: "{siteKey}",
+        execution: "execute",
+        callback: (token) => {
+          const input = ensureHiddenTokenInput();
+          input.value = token;
+
+          // submit after token
+          if (submitting) form.submit();
+        },
+        "error-callback": () => {
+          submitting = false;
+          if (submitBtn) submitBtn.disabled = false;
+          alert("Verification failed. Please try again.");
+        },
+        "expired-callback": () => {
+          // token expired, require new execute
+          const input = ensureHiddenTokenInput();
+          input.value = "";
+        },
+      });
+    }
+
+    // Wait for script load
+    ts.addEventListener("load", () => renderWidgetWhenReady());
+    // Also attempt in case it's already available
+    window.addEventListener("load", () => renderWidgetWhenReady());
+
+    form?.addEventListener("submit", (e) => {
+      // If we already have a token, let it go through
+      const existing = form.querySelector('input[name="cf-turnstile-response"]')?.value;
+      if (existing) return;
+
+      // Otherwise intercept, execute Turnstile, then submit
+      e.preventDefault();
+      if (!window.turnstile) return;
+
+      renderWidgetWhenReady();
+      if (widgetId === null) return;
+
+      submitting = true;
+      if (submitBtn) submitBtn.disabled = true;
+
+      // Run challenge now
+      window.turnstile.execute(widgetId);
+    });
+  </script>
 </BaseLayout>
