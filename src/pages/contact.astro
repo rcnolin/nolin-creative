@@ -58,17 +58,15 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
           ></textarea>
         </div>
 
-        <!-- Invisible Turnstile mount point (no visible footprint) -->
+        <!-- Managed Turnstile, visually subtle -->
         <div
-          class="cf-turnstile"
+          class="cf-turnstile turnstile"
           data-sitekey={siteKey}
-          data-execution="execute"
-          data-callback="onTurnstileSuccess"
+          data-appearance="interaction-only"
         ></div>
 
         <div class="pt-2">
           <button
-            id="submit-btn"
             type="submit"
             class="inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800 cursor-pointer"
           >
@@ -88,7 +86,7 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
       <p class="text-sm font-medium tracking-wide text-neutral-500">SENT</p>
       <h2 class="mt-2 text-2xl font-semibold tracking-tight">Message received</h2>
       <p class="mt-3 text-sm text-neutral-700">
-        Thanks for reaching out. Typical reply time: 1-2 business days.
+        Thanks for reaching out. Typical reply time: 1-2 days.
       </p>
 
       <div class="mt-6 flex justify-end">
@@ -103,34 +101,46 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
     </div>
   </dialog>
 
+  <!-- Turnstile script -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
   <script>
-  // @ts-nocheck
+    // @ts-nocheck
+    const sent = {sent};
+    const dialog = document.getElementById("contact-success");
+    const closeBtn = document.querySelector("[data-close-success]");
 
-  const sent = {sent};
-  const dialog = document.getElementById("contact-success");
-  const closeBtn = document.querySelector("[data-close-success]");
+    function openSuccess() {
+      if (!dialog) return;
+      if (typeof dialog.showModal === "function") dialog.showModal();
+      else dialog.setAttribute("open", "");
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("sent");
+        window.history.replaceState({}, "", url.toString());
+      } catch {}
+    }
 
-  if (sent && dialog?.showModal) {
-    dialog.showModal();
-    const url = new URL(window.location.href);
-    url.searchParams.delete("sent");
-    window.history.replaceState({}, "", url.toString());
-  }
+    if (sent) openSuccess();
 
-  closeBtn?.addEventListener("click", () => dialog?.close());
+    closeBtn?.addEventListener("click", () => {
+      try { dialog?.close?.(); } catch {}
+    });
+  </script>
 
-  // Invisible Turnstile auto execution
-  function onTurnstileSuccess(token) {
-    // token automatically gets inserted into hidden input
-    document.getElementById("contact-form").submit();
-  }
+  <style>
+    /* Keep Turnstile present but visually quiet */
+    .turnstile {
+      margin-top: 0.75rem;
+      opacity: 0.55;
+      transform: scale(0.92);
+      transform-origin: left;
+    }
 
-  window.onTurnstileSuccess = onTurnstileSuccess;
-
-  const script = document.createElement("script");
-  script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
-  script.async = true;
-  script.defer = true;
-  document.head.appendChild(script);
-</script>
+    @media (max-width: 640px) {
+      .turnstile {
+        transform-origin: center;
+      }
+    }
+  </style>
 </BaseLayout>
