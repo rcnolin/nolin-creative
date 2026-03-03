@@ -78,9 +78,9 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 
   <!-- Success dialog -->
   <dialog
-    id="contact-success"
-    class="w-[min(520px,calc(100vw-2rem))] rounded-2xl bg-white p-0 shadow-2xl backdrop:bg-black/55"
-  >
+  id="contact-success"
+  class="fixed inset-0 m-auto w-[min(520px,calc(100vw-2rem))] rounded-2xl bg-white p-0 shadow-2xl"
+>
     <div class="p-6 md:p-7">
       <p class="text-sm font-medium tracking-wide text-neutral-500">SENT</p>
       <h2 class="mt-2 text-2xl font-semibold tracking-tight">Message received</h2>
@@ -92,7 +92,7 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
         <button
           type="button"
           data-close-success
-          class="rounded-full border border-neutral-300 bg-white px-5 py-3 text-sm font-medium text-neutral-900 hover:bg-neutral-50 cursor-pointer"
+          class="rounded-full border border-neutral-300 bg-white px-5 py-3 text-sm font-medium text-neutral-900 hover:shadow-[inset_0_0_0_1px_rgba(0,0,0,0.9)] cursor-pointer focus:outline-none focus:ring-0"
         >
           Close
         </button>
@@ -138,6 +138,14 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
       opacity: 0.55;
       transform: scale(0.92);
       transform-origin: left;
+    }
+    
+    #contact-success {
+      border: none;
+    }
+
+    #contact-success::backdrop {
+      background: rgba(0, 0, 0, 0.55);
     }
 
     @media (max-width: 640px) {
