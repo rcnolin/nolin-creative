@@ -16,7 +16,7 @@ export const onRequestPost: PagesFunction<Env> = async ({
   const message = String(form.get("message") || "").trim();
   const token = String(form.get("cf-turnstile-response") || "").trim();
 
-  if (!name || !email || !message) {
+  if (!name || !email ) {
     return new Response("Missing required fields.", { status: 400 });
   }
 
